@@ -1,0 +1,103 @@
+{
+    "Age_Range": {
+        "20-30": "20-30",
+        "31": "31-40",
+        "31-40": "31-40",
+        "41-50": "41-50",
+        "51-60": "51-60",
+        "60+": "60+",
+        "61-70": "60+",
+        "61+": "60+"
+    },
+    "Race": {
+        "asian": "Asian",
+        "Asian": "Asian",
+        "White": "White",
+        "Whate": "White",
+        "white": "White",
+        "Whiite": "White",
+        "Whitei": "White",
+        "Whtie": "White",
+        "w": "White",
+        "W": "White",
+        "black": "Black",
+        "Black": "Black",
+        "WHITE-ARAB": "White-Arab",
+        "white (middle eastern not an option)": "White-Arab"
+    },
+    "Ethnicity": {
+        "non-hisp": "Non-Hispanic",
+        "non-Hisp": "Non-Hispanic",
+        "Non-hisp": "Non-Hispanic",
+        "Non-Hisp": "Non-Hispanic",
+        "non-hispanic": "Non-Hispanic",
+        "Non-Hispanic": "Non-Hispanic",
+        "hispanic": "Hispanic",
+        "Hispanic": "Hispanic"
+    },
+    "Training": {
+        "attending": "attending",
+        "fellow": "fellow",
+        "Fellow": "fellow",
+        "Resident Physician": "resident",
+        "r": "resident",
+        "resident": "resident",
+        "resident and attending in the time frame": "resident and attending in the time frame",
+        "Attg MD": "attending",
+        "Attending Physician": "attending",
+        "CNM": "CNM",
+        "NP/PA": "NP/PA",
+        "Training": "Training"
+    },
+    "Specialty": {
+        "general OB-GYN": "general OB-GYN",
+        "MFM": "MFM",
+        "mfm": "MFM",
+        "family medicine": "family medicine",
+        "Family Medicine": "family medicine",
+        "general ob/gyn": "general OB-GYN",
+        "migs": "general OB-GYN",
+        "Gen ObGyn": "general OB-GYN",
+        "Gen Ob/GYN": "general OB-GYN",
+        "General ObGyn": "general OB-GYN"
+    },
+    "Scope": {
+        "ob": "OB only",
+        "OB only": "OB only",
+        "Ob only": "OB only",
+        "migs": "OB & GYN",
+        "ob & GYN": "OB & GYN",
+        "ob + gyn": "OB & GYN",
+        "OB& GYN": "OB & GYN",
+        "Ob& GYN": "OB & GYN",
+        "Ob+GYN": "OB & GYN",
+        "OB+GYN": "OB & GYN",
+        "Ob+Gyn": "OB & GYN"
+    },
+    "Gender_Identity": {
+        "Woman": "Woman",
+        "woman": "Woman",
+        "Wooman": "Woman",
+        "man": "Man",
+        "Man": "Man"
+    },
+    "Religion": {
+        "atheist": "atheist/agnostic",
+        "atheist/agnostic": "atheist/agnostic",
+        "catholic": "catholic",
+        "hindu": "hindu",
+        "jewish": "jewish",
+        "mormon": "mormon",
+        "none": "atheist/agnostic",
+        "other: spiritual": "other",
+        "other: zoroastrian": "other",
+        "protestant": "protestant",
+        "something else": "other",
+        "unknown": "unknown"
+    },
+    "Comfort with Counseling Re: Permanent Contraception": {
+        "somewhat comfortable": "somewhat comfortable",
+        "very comfortable": "very comfortable",
+        "Very comf": "very comfortable"
+    }
+}
