@@ -4,6 +4,9 @@ import numpy as np
 import json 
 
 
+provider_cols=["Race",  "Age_Range", "Ethnicity", "Training", "Specialty",
+          "Scope", "Gender_Identity", "Religion", "Comfort with Counseling Re: Permanent Contraception"]
+
 def load_provider_self_demographics(data_dir, provider_clean_up_dict):
     
     provider_UAB = pd.read_excel(os.path.join(data_dir, "providers_final.xlsx"), sheet_name='UAB')

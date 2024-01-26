@@ -39,6 +39,7 @@ if __name__ == '__main__':
     data_dir = os.environ['DATA_DIR']
 
     prenatal_provider_df = get_linkage(data_dir)
+
     print(prenatal_provider_df.head())
     print(len(prenatal_provider_df['prenatal_provider']), 'deliveries')
     print(prenatal_provider_df['prenatal_provider'].nunique(), 'providers')

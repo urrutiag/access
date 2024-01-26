@@ -71,13 +71,23 @@ if __name__ == '__main__':
     delivery_df = delivery_df.merge(age_comp_df.rename(columns={'provider_age_bin':'Age_Range'}), on=['mat_age_bin', 'Age_Range'], how='left')
     
     delivery_df = delivery_df.dropna(subset='prenatal_provider')
+    print('N deliveries, providers:', len(delivery_df), delivery_df['prenatal_provider'].nunique())
+    delivery_df = delivery_df[delivery_df['Race'].notna() | delivery_df['Age_Range'].notna() | delivery_df['Gender_Identity'].notna()]
+    print('N deliveries, providers:', len(delivery_df), delivery_df['prenatal_provider'].nunique())
+    # delivery_df = delivery_df.dropna(subset=['Race', 'Age_Range', 'Gender_Identity'])
+    # print('N deliveries, providers:', len(delivery_df), delivery_df['prenatal_provider'].nunique())
+    
+    # exit()
+    # provider summary table    
+    linked_cols = ["Race_same", "Ethnicity_same", "Age_difference"]
+    provider_cols = provider_demographics.provider_cols + linked_cols
 
-    # provider summary table
-    # TODO run all cols, concat and save csv
-    cols=["Race",  "Age_Range", "Ethnicity", "Training", "Specialty",
-          "Scope", "Gender_Identity", "Religion", "Comfort with Counseling Re: Permanent Contraception", 
-          "Race_same", "Ethnicity_same", "Age_difference"]
-    summary_list = [create_demographic_summary(delivery_df, col) for col in cols]
+    for provider_col in provider_cols:
+        # print(f'percent missing {provider_col}', delivery_df.[col].isna().mean())
+        # print(delivery_df[[provider_col]].value_counts(dropna=False))
+        print(delivery_df.drop_duplicates(subset=['prenatal_provider'])[[provider_col]].value_counts(dropna=False))
+    
+    summary_list = [create_demographic_summary(delivery_df, col) for col in provider_cols]
     summary = pd.concat(summary_list)
     summary.to_csv(f'output/{reporter}_provider_by_valid.csv', index=False)
     
@@ -87,4 +97,19 @@ if __name__ == '__main__':
     summary = pd.concat(summary_list)
     summary.to_csv(f'output/mother_by_valid.csv', index=False)
     
+    binary_map_dict = {
+        'Race':dict(Black=0, Asian=0, White=1),
+        'Age_Range':{"20-30":0, "31-40":0, "41-50":1, "51-60":1, "60+":1},
+        'Ethnicity':{"Hispanic":1, "Non-Hispanic":0},
+        'Training':{"attending":1, "fellow":0, "resident":0, "CNM":0, "NP/PA":0},
+        'Specialty':{"MFM":1, "family medicine":0, "general OB-GYN":1},
+        'Scope':{"OB only":0, "OB & GYN":1},
+        "Gender_Identity":{"Man":0, "Woman":1},
+        'Religion':{"atheist/agnostic":0, "catholic":1, "hindu":1,"Mormon":1, "jewish":1, "protestant":1},
+        'Age_difference':{"younger":0, "same":1, "older":1},
+        'Race_same':{True:0, False:1},
+        'Ethnicity_same':{True:0, False:1},
+        "Comfort with Counseling Re: Permanent Contraception":{"somewhat comfortable":0, "very comfortable":1}}
+    for col, binary_map in binary_map_dict.items():
+        delivery_df[f'{col}_binary'] = delivery_df[col].map(binary_map)
     delivery_df.to_csv(f'output/{reporter}_delivery_df.csv', index=False)

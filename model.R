@@ -58,46 +58,6 @@ get_or <- function(delivery_df, col) {
 
 }
 
-feature_list <- list(
-  list(col_name = "Race",
-       pre = c("Black", "Asian", "White"),
-       post = c(0, 0, 1)),
-  list(col_name = "Age_Range",
-       pre = c("20-30", "31-40", "41-50", "51-60", "60+"),
-       post = c(0, 0, 1, 1, 1)),
-  list(col_name = "Ethnicity",
-       pre = c("Hispanic", "Non-Hispanic"),
-       post = c(1, 0)),
-  list(col_name = "Training",
-       pre = c("attending", "fellow", "resident", "CNM", "NP/PA"),
-       post = c(1, 0, 0, 0, 0)),
-  list(col_name = "Specialty",
-       pre = c("MFM", "family medicine", "general OB-GYN"),
-       post = c(1, 0, 1)),
-  list(col_name = "Scope",
-       pre = c("OB only", "OB & GYN"),
-       post = c(0, 1)),
-  list(col_name = "Gender_Identity",
-       pre = c("Man", "Woman"),
-       post = c(0, 1)),
-  list(col_name = "Religion",
-       pre = c("atheist/agnostic", "catholic", "hindu",
-               "mormon", "jewish", "protestant"),
-       post = c(0, 1, 1, 1, 1)),
-  list(col_name = "Age_difference",
-       pre = c("younger", "same", "older"),
-       post = c(0, 0, 1)),
-  list(col_name = "Race_same",
-       pre = c(TRUE, FALSE),
-       post = c(0, 1)),
-  list(col_name = "Ethnicity_same",
-       pre = c(TRUE, FALSE),
-       post = c(0, 1))
-  # list(col_name = "Comfort with Counseling Re: Permanent Contraception",
-  #      pre = c("somewhat comfortable", "very comfortable"),
-  #      post = c(0, 1))
-)
-
 
 get_or_covariates <- function(delivery_df, col, covariates) {
 
@@ -119,7 +79,7 @@ get_or_covariates <- function(delivery_df, col, covariates) {
   print("fitting CI")
   est <- fixef(mixed_model)
   cc <- confint(mixed_model, parm = "beta_",
-                method = "Wald", devtol = 1e-9) # Wald, boot, profile
+                method = "boot", devtol = 1e-9) # Wald, boot, profile
   logits_table <- cbind(est, cc)
   odds_ratio_table <- exp(logits_table)
   odds_ratio_table <- data.frame(odds_ratio_table)
@@ -133,21 +93,9 @@ get_or_covariates <- function(delivery_df, col, covariates) {
 self_peer <- c("self", "peer")[1]
 
 # Read data
-delivery_df <- read.csv(file = file.path(data_dir,
-                                         paste0(self_peer, "_delivery_df.csv")))
-delivery_df <- delivery_df[delivery_df$Race != "White-Arab", ]
+delivery_df <- read.csv(file = file.path(data_dir, paste0(self_peer, "_delivery_df.csv")))
+# delivery_df <- delivery_df[delivery_df$Race != "White-Arab", ]
 print(paste(nrow(delivery_df), "deliveries"))
-
-# Create binary feature columns
-for (feature_item in feature_list) {
-  col_name <- feature_item$col_name
-  print(table(delivery_df[[col_name]]))
-  col_name_new = paste0(feature_item$col_name, "_binary")
-  delivery_df[[col_name_new]] <-
-    feature_item$post[match(delivery_df[[col_name]], feature_item$pre)]
-  print(table(delivery_df[!duplicated(delivery_df["prenatal_provider"]), ]
-              [, c(col_name, col_name_new)]))
-}
 
 # 4 - odds ratios on binary provider/interaction features (multivariable)
 model_cols_bin <- c("Race_binary",  "Age_Range_binary",
@@ -199,3 +147,53 @@ write.csv(odds_ratio_all, file=file.path(out_dir, paste0(self_peer, "_odds_ratio
 
 stop()
 
+# # Create binary feature columns
+# for (feature_item in feature_list) {
+#   col_name <- feature_item$col_name
+#   print(table(delivery_df[[col_name]]))
+#   col_name_new = paste0(feature_item$col_name, "_binary")
+#   delivery_df[[col_name_new]] <-
+#     feature_item$post[match(delivery_df[[col_name]], feature_item$pre)]
+#   print(table(delivery_df[!duplicated(delivery_df["prenatal_provider"]), ]
+#               [, c(col_name, col_name_new)]))
+# }
+
+# feature_list <- list(
+#   list(col_name = "Race",
+#        pre = c("Black", "Asian", "White"),
+#        post = c(0, 0, 1)),
+#   list(col_name = "Age_Range",
+#        pre = c("20-30", "31-40", "41-50", "51-60", "60+"),
+#        post = c(0, 0, 1, 1, 1)),
+#   list(col_name = "Ethnicity",
+#        pre = c("Hispanic", "Non-Hispanic"),
+#        post = c(1, 0)),
+#   list(col_name = "Training",
+#        pre = c("attending", "fellow", "resident", "CNM", "NP/PA"),
+#        post = c(1, 0, 0, 0, 0)),
+#   list(col_name = "Specialty",
+#        pre = c("MFM", "family medicine", "general OB-GYN"),
+#        post = c(1, 0, 1)),
+#   list(col_name = "Scope",
+#        pre = c("OB only", "OB & GYN"),
+#        post = c(0, 1)),
+#   list(col_name = "Gender_Identity",
+#        pre = c("Man", "Woman"),
+#        post = c(0, 1)),
+#   list(col_name = "Religion",
+#        pre = c("atheist/agnostic", "catholic", "hindu",
+#                "mormon", "jewish", "protestant"),
+#        post = c(0, 1, 1, 1, 1)),
+#   list(col_name = "Age_difference",
+#        pre = c("younger", "same", "older"),
+#        post = c(0, 0, 1)),
+#   list(col_name = "Race_same",
+#        pre = c(TRUE, FALSE),
+#        post = c(0, 1)),
+#   list(col_name = "Ethnicity_same",
+#        pre = c(TRUE, FALSE),
+#        post = c(0, 1))
+#   # list(col_name = "Comfort with Counseling Re: Permanent Contraception",
+#   #      pre = c("somewhat comfortable", "very comfortable"),
+#   #      post = c(0, 1))
+# )
