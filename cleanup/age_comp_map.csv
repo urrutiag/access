@@ -1,4 +1,4 @@
-mat_age_bin,provider_age_bin,provider_age_comp
+mat_age_bin,provider_age_bin,Age_difference
 16-20,31-40,older
 16-20,41-50,older
 16-20,51-60,older

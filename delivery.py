@@ -26,7 +26,7 @@ def load_delivery(data_dir, delivery_clean_up_dict):
     
 if __name__ == '__main__':
 
-    data_dir = '/mnt/c/Users/Urrutia/Dropbox/Documents/UNC_OBGYN/kavita_access/data/'
+    data_dir = os.environ['DATA_DIR']
 
     with open('cleanup/delivery_clean_up_list.json', 'r') as fp:
         delivery_clean_up_dict = json.load(fp=fp)
@@ -34,5 +34,6 @@ if __name__ == '__main__':
     delivery_df = load_delivery(data_dir, delivery_clean_up_dict)
     
     print(delivery_df['site_f'].value_counts())
-    # print(delivery_df[["mat_age_bin"]].value_counts(dropna=False))
+
+    print(delivery_df.notna().mean())
     
