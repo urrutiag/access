@@ -11,7 +11,10 @@ conda create --yes --name access python=3.9
 conda activate access
 pip install -r requirements.txt
 
-sudo apt-get install r-base
+sudo apt install r-base
+sudo apt install r-cran-lme4/jammy
+# TODO install with conda
+
 ```
 
 ```bash
