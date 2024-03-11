@@ -9,26 +9,36 @@ import provider_linkage
 
 def create_demographic_summary(delivery_df, col):
 
+    print(col)
+    # n_deliveries = delivery_df[col].notna().sum()
     delivery_summary = delivery_df.groupby(col).agg(
         providers=pd.NamedAgg(column='prenatal_provider', aggfunc='nunique'),
         deliveries=pd.NamedAgg(column='prenatal_provider', aggfunc='count'),
         form_valid=pd.NamedAgg(column='form_valid_int', aggfunc='sum'),
-        form_valid_proportion=pd.NamedAgg(column='form_valid_int', aggfunc='mean'),
+        # form_valid_proportion=pd.NamedAgg(column='form_valid_int', aggfunc='mean'),
         ).reset_index()
+    print(delivery_summary)
     delivery_summary = delivery_summary.rename(columns={col:'group'})
+    delivery_summary['form_valid_proportion'] = delivery_summary['form_valid'] / delivery_summary['form_valid'].sum()
     delivery_summary['form_not_valid'] = delivery_summary['deliveries'] - delivery_summary['form_valid']
-    delivery_summary['form_not_valid_proportion'] = 1 - delivery_summary['form_valid_proportion']
-    delivery_summary['form_valid_proportion_fmt'] = delivery_summary['form_valid_proportion'].map('{:,.1%}'.format)
-    delivery_summary['form_not_valid_proportion_fmt'] = delivery_summary['form_not_valid_proportion'].map('{:,.1%}'.format)
+    delivery_summary['form_not_valid_proportion'] = delivery_summary['form_not_valid'] / delivery_summary['form_not_valid'].sum()
+    delivery_summary['form_valid_proportion_fmt'] = [
+        f"{row['form_valid']} ({row['form_valid_proportion']:.2f})" 
+        for idx, row in delivery_summary.iterrows()
+    ]
+    delivery_summary['form_not_valid_proportion_fmt'] = [
+        f"{row['form_not_valid']} ({row['form_not_valid_proportion']:.2f})" 
+        for idx, row in delivery_summary.iterrows()
+    ]
     delivery_summary['demographic'] = col
-
-    return delivery_summary
+    
+    return delivery_summary[['demographic', 'group', 'providers', 'deliveries', 'form_valid_proportion_fmt', 'form_not_valid_proportion_fmt']]
 
 
 if __name__ == '__main__':
 
     data_dir = os.environ['DATA_DIR']
-    reporter = 'peer'
+    reporter = 'self'
 
     with open('cleanup/delivery_clean_up_list.json', 'r') as fp:
         delivery_clean_up_dict = json.load(fp=fp)
@@ -81,7 +91,7 @@ if __name__ == '__main__':
     # provider summary table    
     linked_cols = ["Race_same", "Ethnicity_same", "Age_difference"]
     provider_cols = provider_demographics.provider_cols + linked_cols
-
+    # provider_cols = provider_demographics.provider_cols
     for provider_col in provider_cols:
         # print(f'percent missing {provider_col}', delivery_df.[col].isna().mean())
         # print(delivery_df[[provider_col]].value_counts(dropna=False))
@@ -98,13 +108,13 @@ if __name__ == '__main__':
     summary.to_csv(f'output/mother_by_valid.csv', index=False)
     
     binary_map_dict = {
-        'Race':dict(Black=0, Asian=0, White=1),
         'Age_Range':{"20-30":0, "31-40":0, "41-50":1, "51-60":1, "60+":1},
+        "Gender_Identity":{"Man":0, "Woman":1},
+        'Race':dict(Black=0, Asian=0, White=1),
         'Ethnicity':{"Hispanic":1, "Non-Hispanic":0},
         'Training':{"attending":1, "fellow":0, "resident":0, "CNM":0, "NP/PA":0},
         'Specialty':{"MFM":1, "family medicine":0, "general OB-GYN":1},
         'Scope':{"OB only":0, "OB & GYN":1},
-        "Gender_Identity":{"Man":0, "Woman":1},
         'Religion':{"atheist/agnostic":0, "catholic":1, "hindu":1,"Mormon":1, "jewish":1, "protestant":1},
         'Age_difference':{"younger":0, "same":1, "older":1},
         'Race_same':{True:0, False:1},

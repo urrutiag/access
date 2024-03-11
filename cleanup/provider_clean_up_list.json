@@ -22,8 +22,8 @@
         "W": "White",
         "black": "Black",
         "Black": "Black",
-        "WHITE-ARAB": "White-Arab",
-        "white (middle eastern not an option)": "White-Arab"
+        "WHITE-ARAB": "White",
+        "white (middle eastern not an option)": "White"
     },
     "Ethnicity": {
         "non-hisp": "Non-Hispanic",
@@ -42,11 +42,13 @@
         "Resident Physician": "resident",
         "r": "resident",
         "resident": "resident",
-        "resident and attending in the time frame": "resident and attending in the time frame",
+        "resident and attending in the time frame": "resident",
         "Attg MD": "attending",
         "Attending Physician": "attending",
+        "attending cnm": "CNM",
         "CNM": "CNM",
         "NP/PA": "NP/PA",
+        "NP": "NP/PA",
         "Training": "Training"
     },
     "Specialty": {
@@ -56,34 +58,43 @@
         "family medicine": "family medicine",
         "Family Medicine": "family medicine",
         "general ob/gyn": "general OB-GYN",
+        "general obgyn": "general OB-GYN",
         "migs": "general OB-GYN",
         "Gen ObGyn": "general OB-GYN",
         "Gen Ob/GYN": "general OB-GYN",
-        "General ObGyn": "general OB-GYN"
+        "General ObGyn": "general OB-GYN",
+        "midwifery": "midwifery",
+        "ob hospitalist":"general OB-GYN"
     },
     "Scope": {
         "ob": "OB only",
         "OB only": "OB only",
         "Ob only": "OB only",
+        "ob only": "OB only",
         "migs": "OB & GYN",
         "ob & GYN": "OB & GYN",
         "ob + gyn": "OB & GYN",
         "OB& GYN": "OB & GYN",
         "Ob& GYN": "OB & GYN",
         "Ob+GYN": "OB & GYN",
+        "ob+gyn": "OB & GYN",
         "OB+GYN": "OB & GYN",
-        "Ob+Gyn": "OB & GYN"
+        "Ob+Gyn": "OB & GYN",
+        "gyn only": "GYN only"
     },
     "Gender_Identity": {
         "Woman": "Woman",
         "woman": "Woman",
         "Wooman": "Woman",
         "man": "Man",
-        "Man": "Man"
+        "Man": "Man",
+        "female": "Woman",
+        "male": "Man"
     },
     "Religion": {
         "atheist": "atheist/agnostic",
         "atheist/agnostic": "atheist/agnostic",
+        "agnostic": "atheist/agnostic",
         "catholic": "catholic",
         "hindu": "hindu",
         "jewish": "jewish",
@@ -93,11 +104,14 @@
         "other: zoroastrian": "other",
         "protestant": "protestant",
         "something else": "other",
-        "unknown": "unknown"
+        "unknown": "unknown",
+        "buddhist":"buddhist",
+        "muslim":"muslim"
     },
     "Comfort with Counseling Re: Permanent Contraception": {
         "somewhat comfortable": "somewhat comfortable",
         "very comfortable": "very comfortable",
-        "Very comf": "very comfortable"
+        "Very comf": "very comfortable",
+        "very confortable": "very comfortable"
     }
 }

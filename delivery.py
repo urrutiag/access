@@ -20,6 +20,8 @@ def load_delivery(data_dir, delivery_clean_up_dict):
                                         labels=["16-20", "21-25", "26-30", "31-35", "36-40", "41-45", "46-50"])  # include right
     # delivery_df[, "mat_age_bin"] = factor(delivery_df$mat_age_bin, levels = c("16-20", "21-25", "26-30", "31-35", "36-40", "41-45", "46-50"))
     
+    delivery_df = delivery_df[delivery_df["mat_age_bin"] != "16-20"]
+    
     return delivery_df
 
 
