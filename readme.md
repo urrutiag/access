@@ -26,3 +26,15 @@ python main.py
 ```
 Rscript model.R
 ```
+
+# Input data (previous work)
+all_sites_primary_vars.csv 
+delivery_clean_up_dict applied to consolidate different ways 
+
+# Output data (my work)
+
+TODO copy results to dropbox
+
+peer_delivery_df.csv
+
+self_delivery_df.csv

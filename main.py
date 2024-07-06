@@ -84,6 +84,7 @@ if __name__ == '__main__':
     print('N deliveries, providers:', len(delivery_df), delivery_df['prenatal_provider'].nunique())
     delivery_df = delivery_df[delivery_df['Race'].notna() | delivery_df['Age_Range'].notna() | delivery_df['Gender_Identity'].notna()]
     print('N deliveries, providers:', len(delivery_df), delivery_df['prenatal_provider'].nunique())
+    exit()
     # delivery_df = delivery_df.dropna(subset=['Race', 'Age_Range', 'Gender_Identity'])
     # print('N deliveries, providers:', len(delivery_df), delivery_df['prenatal_provider'].nunique())
     
