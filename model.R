@@ -102,46 +102,17 @@ delivery_df <- read.csv(file = file.path(data_dir, paste0(self_peer, "_delivery_
 # delivery_df <- delivery_df[delivery_df$Race != "White-Arab", ]
 print(paste(nrow(delivery_df), "deliveries"))
 
-# # 4 - odds ratios on binary provider/interaction features (multivariable)
-# model_cols_bin_profile <- c("Race_binary",  "Age_Range_binary", "Gender_Identity_binary",
-#                     "Specialty_binary", "Training_binary",
-#                     "Scope_binary",
-#                     "Religion_binary")
-# model_cols_bin_wald <- c("Ethnicity_binary", "Age_difference_binary", "Race_same_binary",
-#                     "Ethnicity_same_binary")
-# model_cols_bin_wald_self <- c("Race_binary",  "Age_Range_binary", "Gender_Identity_binary",
-#                     "Specialty_binary", "Training_binary",
-#                     "Scope_binary",
-#                     "Religion_binary", "Ethnicity_binary", "Age_difference_binary", "Race_same_binary",
-#                     "Ethnicity_same_binary")
-# model_cols_bin <- model_cols_bin_wald_self
-# odds_ratio_list <-
-#   lapply(model_cols_bin, get_or_covariates, delivery_df = delivery_df,
-#          covariates = c("Race_binary", "Age_Range_binary",
-#                         "Gender_Identity_binary"))
-# odds_ratio_all <- rbindlist(odds_ratio_list, use.names = TRUE,
-#                             fill = FALSE, idcol = FALSE)
-# odds_ratio_all$OR_format <- paste0(round(odds_ratio_all$est, 2), " (",
-#                                    round(odds_ratio_all$X2.5.., 2), ", ",
-#                                    round(odds_ratio_all$X97.5.., 2), ")")
-# write.csv(odds_ratio_all,
-#           file = file.path(out_dir, 
-#                            paste0(self_peer, "_odds_ratios_multivariable.csv")),
-#           row.names = FALSE)
-# stop()
-
 # # 1 - anova on provider/combination features
-# model_cols_provider = c("Race",  "Age_Range", "Ethnicity", "Training", "Specialty", 
-#                         "Scope", "Gender_Identity", "Religion", "Race_same", 
-#                         "Ethnicity_same", "Age_difference") # "Comfort with Counseling Re: Permanent Contraception"
-# p_values_provider = sapply(model_cols_provider, get_anova_p, delivery_df=delivery_df)
-# write.csv(p_values_provider, file.path(out_dir, paste0(self_peer, "_anova_provider.csv")))
+model_cols_provider = c("Race",  "Age_Range", "Ethnicity", "Training", "Specialty", 
+                        "Scope", "Gender_Identity", "Religion", "Race_same", 
+                        "Ethnicity_same", "Age_difference") # "Comfort with Counseling Re: Permanent Contraception"
+p_values_provider = sapply(model_cols_provider, get_anova_p, delivery_df=delivery_df)
+write.csv(p_values_provider, file.path(out_dir, paste0(self_peer, "_anova_provider.csv")))
 
 # # 2 - anova on patient features
-# mom_demo_cols = c("mat_age_bin", "mom_ethn_backgr_f2", "marital_status_f_di2", "education_level_f", "race_upd2")
-# p_values_patient = sapply(mom_demo_cols, get_anova_p_patient, delivery_df=delivery_df)
-# write.csv(p_values_patient, file.path(out_dir, "anova_patient.csv"))
-
+mom_demo_cols = c("mat_age_bin", "mom_ethn_backgr_f2", "marital_status_f_di2", "education_level_f", "race_upd2")
+p_values_patient = sapply(mom_demo_cols, get_anova_p_patient, delivery_df=delivery_df)
+write.csv(p_values_patient, file.path(out_dir, "anova_patient.csv"))
 
 # 3 - odds ratios on binary provider/interaction features (univariable)
 model_cols_bin = c("Race_binary",  "Age_Range_binary", "Ethnicity_binary", "Specialty_binary",  "Training_binary",
@@ -153,3 +124,32 @@ odds_ratio_all$OR_format = paste0(round(odds_ratio_all$est, 2), " (",
                                   round(odds_ratio_all$X2.5.., 2), ", ", 
                                   round(odds_ratio_all$X97.5.., 2), ")" )
 write.csv(odds_ratio_all, file=file.path(out_dir, paste0(self_peer, "_odds_ratios_univariable.csv")), row.names=FALSE)   
+
+
+# 4 - odds ratios on binary provider/interaction features (multivariable)
+model_cols_bin_profile <- c("Race_binary",  "Age_Range_binary", "Gender_Identity_binary",
+                    "Specialty_binary", "Training_binary",
+                    "Scope_binary",
+                    "Religion_binary")
+model_cols_bin_wald <- c("Ethnicity_binary", "Age_difference_binary", "Race_same_binary",
+                    "Ethnicity_same_binary")
+model_cols_bin_wald_self <- c("Race_binary",  "Age_Range_binary", "Gender_Identity_binary",
+                    "Specialty_binary", "Training_binary",
+                    "Scope_binary",
+                    "Religion_binary", "Ethnicity_binary", "Age_difference_binary", "Race_same_binary",
+                    "Ethnicity_same_binary")
+model_cols_bin <- model_cols_bin_wald_self
+odds_ratio_list <-
+  lapply(model_cols_bin, get_or_covariates, delivery_df = delivery_df,
+         covariates = c("Race_binary", "Age_Range_binary",
+                        "Gender_Identity_binary"))
+odds_ratio_all <- rbindlist(odds_ratio_list, use.names = TRUE,
+                            fill = FALSE, idcol = FALSE)
+odds_ratio_all$OR_format <- paste0(round(odds_ratio_all$est, 2), " (",
+                                   round(odds_ratio_all$X2.5.., 2), ", ",
+                                   round(odds_ratio_all$X97.5.., 2), ")")
+write.csv(odds_ratio_all,
+          file = file.path(out_dir, 
+                           paste0(self_peer, "_odds_ratios_multivariable.csv")),
+          row.names = FALSE)
+# stop()

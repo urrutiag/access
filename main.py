@@ -72,6 +72,7 @@ if __name__ == '__main__':
     delivery_df = delivery_df.merge(provider_demo_df, on=['site', 'prenatal_provider'], how='left')
     delivery_df['linked_to_provider_demographics'] = delivery_df['Race'].notna()
     print(delivery_df.groupby('site')['linked_to_provider_demographics'].mean())
+    print(delivery_df['linked_to_provider_demographics'].mean())
     missed_demo = delivery_df.loc[~delivery_df['linked_to_provider_demographics'] & delivery_df['linked_to_provider'],['site', 'prenatal_provider']].drop_duplicates()
     missed_demo.sort_values(['site', 'prenatal_provider']).to_csv('output/missed_demo.csv', index=False)
 
@@ -80,18 +81,21 @@ if __name__ == '__main__':
     delivery_df['Ethnicity_same'] = delivery_df['Ethnicity'] == delivery_df['mom_ethn_backgr_f2'] # provider, mother
     delivery_df = delivery_df.merge(age_comp_df.rename(columns={'provider_age_bin':'Age_Range'}), on=['mat_age_bin', 'Age_Range'], how='left')
     
+    print('N deliveries, providers:', len(delivery_df), delivery_df['prenatal_provider'].nunique())
     delivery_df = delivery_df.dropna(subset='prenatal_provider')
     print('N deliveries, providers:', len(delivery_df), delivery_df['prenatal_provider'].nunique())
-    delivery_df = delivery_df[delivery_df['Race'].notna() | delivery_df['Age_Range'].notna() | delivery_df['Gender_Identity'].notna()]
+    delivery_df = delivery_df[delivery_df['Race'].notna() & delivery_df['Age_Range'].notna() & delivery_df['Gender_Identity'].notna()]
     print('N deliveries, providers:', len(delivery_df), delivery_df['prenatal_provider'].nunique())
-    exit()
+
     # delivery_df = delivery_df.dropna(subset=['Race', 'Age_Range', 'Gender_Identity'])
     # print('N deliveries, providers:', len(delivery_df), delivery_df['prenatal_provider'].nunique())
     
-    # exit()
     # provider summary table    
     linked_cols = ["Race_same", "Ethnicity_same", "Age_difference"]
     provider_cols = provider_demographics.provider_cols + linked_cols
+
+    print(delivery_df['form_valid'].value_counts())
+
     # provider_cols = provider_demographics.provider_cols
     for provider_col in provider_cols:
         # print(f'percent missing {provider_col}', delivery_df.[col].isna().mean())
@@ -107,7 +111,7 @@ if __name__ == '__main__':
     summary_list = [create_demographic_summary(delivery_df, col) for col in mom_demo_cols]
     summary = pd.concat(summary_list)
     summary.to_csv(f'output/mother_by_valid.csv', index=False)
-    
+    exit()
     binary_map_dict = {
         'Age_Range':{"20-30":0, "31-40":0, "41-50":1, "51-60":1, "60+":1},
         "Gender_Identity":{"Man":0, "Woman":1},
@@ -116,7 +120,7 @@ if __name__ == '__main__':
         'Training':{"attending":1, "fellow":0, "resident":0, "CNM":0, "NP/PA":0},
         'Specialty':{"MFM":1, "family medicine":0, "general OB-GYN":1},
         'Scope':{"OB only":0, "OB & GYN":1},
-        'Religion':{"atheist/agnostic":0, "catholic":1, "hindu":1,"Mormon":1, "jewish":1, "protestant":1},
+        'Religion':{"atheist/agnostic":0, "christian":1, "hindu":1,"Mormon":1, "jewish":1},
         'Age_difference':{"younger":0, "same":1, "older":1},
         'Race_same':{True:0, False:1},
         'Ethnicity_same':{True:0, False:1},

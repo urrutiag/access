@@ -45,6 +45,6 @@ if __name__ == '__main__':
     print(prenatal_provider_df['prenatal_provider'].nunique(), 'providers')
     print(prenatal_provider_df['prenatal_provider'].notna().mean(), 'linked')
 
-    prenatal_provider_df[['site', 'prenatal_provider']].dropna().drop_duplicates().sort_values(['site', 'prenatal_provider']).to_csv('provider_delivery_list.csv', index=False)
+    prenatal_provider_df[['site', 'prenatal_provider']].dropna().drop_duplicates().sort_values(['site', 'prenatal_provider']).to_csv('results/provider_delivery_list.csv', index=False)
 
 

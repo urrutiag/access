@@ -51,13 +51,18 @@ def load_provider_self_demographics(data_dir, provider_clean_up_dict):
 
 def load_provider_peer_demographics(data_dir, provider_clean_up_dict):
 
+    
+    print('read UAB')
     provider_UAB = pd.read_excel(os.path.join(data_dir, "providers peer reported.xlsx"), sheet_name='UAB')
     provider_UAB['site'] = 'UAB'
     # provider_UAB = provider_UAB[provider_UAB['Training'].notna()]
-    
+    print(f'UAB: {len(provider_UAB)} provider demo rows')
+
+
     provider_Metro = pd.read_excel(os.path.join(data_dir, "providers peer reported.xlsx"), sheet_name='Metro')
     provider_Metro['site'] = 'MetroHealth'
     # provider_Metro = provider_Metro[provider_Metro['Age Range'].notna()] # filter out missing age range
+    print(f'MetroHealth: {len(provider_Metro)} provider demo rows')
 
     provider_UCSF = pd.read_excel(os.path.join(data_dir, "UCSFproviders_final.xlsx"), sheet_name='tania- peer reported')
     provider_UCSF['site'] = 'UCSF'
@@ -67,32 +72,42 @@ def load_provider_peer_demographics(data_dir, provider_clean_up_dict):
         .str.rstrip(',')
         .str.lower())
     # provider_UCSF = provider_UCSF[provider_UCSF['Age Range'].notna()] # filter out missing age range
-    
+    print(f'UCSF: {len(provider_UCSF)} provider demo rows')
+
     provider_demo_df = pd.concat([provider_UAB, provider_Metro, provider_UCSF], ignore_index=True)
     provider_demo_df = provider_demo_df.rename(
         columns={'Unnamed: 0':"prenatal_provider",
                     'Age Range':'Age_Range',
                     'Gender Identity':'Gender_Identity'})
-    
+    print(f'UAB, Metro, UCSF: {len(provider_demo_df)} provider demo rows')
+
+    print('Retain complete Age_Range, Race, Gender_Identity')
+    provider_demo_df = provider_demo_df.dropna(subset=['Age_Range', 'Race', 'Gender_Identity'])
+    print(f'{len(provider_demo_df)} complete provider demo rows')
+
+    provider_supp = pd.read_excel(os.path.join(data_dir, "missing_key_demo_tb_20240827.xlsx"), sheet_name='missing_key_demo')
+    print(f'Supp: {len(provider_supp)} provider demo rows')
+    print('Retain complete Age_Range, Race, Gender_Identity')
+    provider_supp = provider_supp.dropna(subset=['Age_Range', 'Race', 'Gender_Identity'])
+    print(f'Supp: {len(provider_supp)} complete provider demo rows')
+
+    provider_demo_df = pd.concat([provider_demo_df, provider_supp])
+    print(f'{len(provider_demo_df)} total complete provider demo rows')
+
     for col_name, value_map in provider_clean_up_dict.items():
+        provider_demo_df[f'{col_name}_og'] = provider_demo_df[col_name]
         if col_name == 'Religion':
             provider_demo_df[col_name] = provider_demo_df[col_name].str.lower().map(value_map)
         else:
-            provider_demo_df[col_name] = provider_demo_df[col_name].map(value_map)
-
-    print(len(provider_demo_df))
-    # provider_demo_df = provider_demo_df.dropna(subset=['Age_Range', 'Race', 'Gender_Identity'])
-    missing_demo = provider_demo_df[provider_demo_df['Age_Range'].isna() | 
-                                provider_demo_df['Race'].isna() |
-                                provider_demo_df['Gender_Identity'].isna()]
-    missing_demo.to_csv('output/missing_key_demo.csv')
-
-    provider_demo_df = provider_demo_df[provider_demo_df['Age_Range'].notna() |
-                                        provider_demo_df['Race'].notna() |
-                                        provider_demo_df['Gender_Identity'].notna() ]
-    print(len(provider_demo_df))
-
+            provider_demo_df[col_name] = provider_demo_df[col_name].str.rstrip().map(value_map)
+        # print(provider_demo_df[[f'{col_name}_og', col_name]].value_counts(dropna=False))
+    # missing_demo = provider_demo_df[provider_demo_df['Age_Range'].isna() | 
+    #                             provider_demo_df['Race'].isna() |
+    #                             provider_demo_df['Gender_Identity'].isna()]
+    # missing_demo.to_csv('output/missing_key_demo.csv')
+    
     return provider_demo_df
+
 
 
 if __name__ == '__main__':
@@ -119,7 +134,7 @@ if __name__ == '__main__':
     print(provider_demo_self_df.set_index('site').notna().groupby(level=0).mean())
     print(provider_demo_self_df.notna().mean())
     print(provider_demo_self_df['Training'].value_counts().keys())
-    exit()
+    
     # Accuracy check
     accuracy_cols = ['Age_Range', 'Race', 'Gender_Identity', 'Ethnicity', 'Training', 'Specialty', 'Scope', 'Religion', 'Comfort with Counseling Re: Permanent Contraception']
     suffixes=['_self', '_peer']
@@ -132,8 +147,11 @@ if __name__ == '__main__':
                 how='inner',
                 suffixes=suffixes)
         )
-        print(np.mean(comp_df[col + suffixes[0]] == comp_df[col + suffixes[1]]))
-
+        print(np.mean(comp_df[col + suffixes[0]] == comp_df[col + suffixes[1]]).round(2))
+        if col =='Race':
+            print(comp_df)
+            print(comp_df[comp_df['Race_self'] == 'Asian'])
+    
     # provider_demo_df[['site', 'prenatal_provider']].sort_values(['site', 'prenatal_provider']).to_csv('output/provider_demo_list.csv', index=False)
     # print(provider_demo_df['Religion'].value_counts())
 

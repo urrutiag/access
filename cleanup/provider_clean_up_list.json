@@ -1,13 +1,18 @@
 {
     "Age_Range": {
         "20-30": "20-30",
+        "<30": "20-30",
         "31": "31-40",
+        "30-40": "31-40",
         "31-40": "31-40",
+        "40-50": "41-50",
         "41-50": "41-50",
+        "50-60": "51-60",
         "51-60": "51-60",
         "60+": "60+",
         "61-70": "60+",
-        "61+": "60+"
+        "61+": "60+",
+        ">60":"60+"
     },
     "Race": {
         "asian": "Asian",
@@ -32,6 +37,9 @@
         "Non-Hisp": "Non-Hispanic",
         "non-hispanic": "Non-Hispanic",
         "Non-Hispanic": "Non-Hispanic",
+        "non-hispanic white": "Non-Hispanic",
+        "non hispanic white": "Non-Hispanic",
+        "Non-hispanic":"Non-Hispanic",
         "hispanic": "Hispanic",
         "Hispanic": "Hispanic"
     },
@@ -57,6 +65,8 @@
         "mfm": "MFM",
         "family medicine": "family medicine",
         "Family Medicine": "family medicine",
+        "Fam Med": "family medicine",
+        "fam med": "family medicine",
         "general ob/gyn": "general OB-GYN",
         "general obgyn": "general OB-GYN",
         "migs": "general OB-GYN",
@@ -64,7 +74,10 @@
         "Gen Ob/GYN": "general OB-GYN",
         "General ObGyn": "general OB-GYN",
         "midwifery": "midwifery",
-        "ob hospitalist":"general OB-GYN"
+        "cnm": "midwifery",
+        "ob hospitalist":"general OB-GYN",
+        "ObGyn":"general OB-GYN",
+        "genearl obgyn":"general OB-GYN"
     },
     "Scope": {
         "ob": "OB only",
@@ -73,6 +86,9 @@
         "ob only": "OB only",
         "migs": "OB & GYN",
         "ob & GYN": "OB & GYN",
+        "ob&gyn": "OB & GYN",
+        "OB & GYN": "OB & GYN",
+        "OB&GYN": "OB & GYN",
         "ob + gyn": "OB & GYN",
         "OB& GYN": "OB & GYN",
         "Ob& GYN": "OB & GYN",
@@ -95,14 +111,15 @@
         "atheist": "atheist/agnostic",
         "atheist/agnostic": "atheist/agnostic",
         "agnostic": "atheist/agnostic",
-        "catholic": "catholic",
+        "catholic": "christian",
+        "christian": "christian",
         "hindu": "hindu",
         "jewish": "jewish",
         "mormon": "mormon",
         "none": "atheist/agnostic",
         "other: spiritual": "other",
         "other: zoroastrian": "other",
-        "protestant": "protestant",
+        "protestant": "christian",
         "something else": "other",
         "unknown": "unknown",
         "buddhist":"buddhist",
